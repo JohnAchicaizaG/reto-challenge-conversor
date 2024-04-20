@@ -1,21 +1,28 @@
 package Menu;
 
+import Api.ExchangeRateAPI;
+
 import java.util.Scanner;
 
-public class MenuConversor {
+public class MenuConverse {
     private Scanner scanner;
 
-    public MenuConversor() {
+    public MenuConverse() {
         scanner = new Scanner(System.in);
     }
 
-    public void mostrarMenu() {
+    public void showMenu() {
         int opcion;
         do {
-            System.out.println("****** Conversor de Monedas ******");
+            System.out.println();
+            System.out.println();
+            System.out.println("************************ CONVERSOR DE UNIDADES ************************");
+            System.out.println();
             System.out.println("0. Salir");
             System.out.println("1. Convertir moneda");
-
+            System.out.println("2. Listar códigos aceptados");
+            System.out.println();
+            System.out.println("***********************************************************************");
             System.out.print("Ingrese el número de la opción deseada: ");
             opcion = scanner.nextInt();
 
@@ -24,27 +31,40 @@ public class MenuConversor {
                     System.out.println("Saliendo del conversor de monedas...");
                     break;
                 case 1:
-                    convertirMoneda();
+                    convertCurrency();
                     break;
+                case 2:
+                    System.out.println("Estos son los codigos aceptados para el cambio ");
+                    showCodes();
                 default:
                     System.out.println("Opción inválida. Por favor, ingrese un número válido.");
             }
         } while (opcion != 0);
     }
 
-    private void convertirMoneda() {
-        System.out.println("Ingrese la cantidad a cambiar:");
-        double cantidad = scanner.nextDouble();
-        scanner.nextLine(); // Limpiar el buffer
-        System.out.println("Ingrese la moneda original (ejemplo: USD, EUR, etc.):");
-        String monedaOriginal = scanner.nextLine();
-        System.out.println("Ingrese la moneda a la que desea convertir:");
-        String monedaDestino = scanner.nextLine();
+    private void convertCurrency() {
+        ExchangeRateAPI exchangeRateAPI = new ExchangeRateAPI();
 
-        // Aquí puedes llamar a tus métodos para realizar la conversión
-        // Por ahora, solo imprimimos los datos ingresados
-        System.out.println("Cantidad: " + cantidad);
-        System.out.println("Moneda original: " + monedaOriginal);
-        System.out.println("Moneda destino: " + monedaDestino);
+        System.out.print("Ingrese la cantidad a cambiar:");
+        int amount = scanner.nextInt();
+
+        scanner.nextLine();
+        System.out.println("Ingrese la moneda original (ejemplo: USD, EUR, COP, Puedes ver el listado de códigos en la opcion 2 del menú.):");
+
+        String baseCurrency = scanner.nextLine();
+
+        System.out.println("Ingrese la moneda a la que desea convertir:");
+        String targetCurrency = scanner.nextLine();
+
+        exchangeRateAPI.convertCurrency(baseCurrency, targetCurrency, amount);
+
     }
+
+    private void showCodes(){
+        ExchangeRateAPI exchangeRateAPI = new ExchangeRateAPI();
+        exchangeRateAPI.showList();
+    }
+
+
+
 }
